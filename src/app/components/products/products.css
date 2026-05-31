@@ -1,0 +1,59 @@
+.container {
+  max-width: 1400px;
+}
+
+.header-section {
+  margin-bottom: 25px;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+}
+
+.form-control,
+textarea {
+  border-radius: 8px;
+}
+
+.btn {
+  border-radius: 8px;
+}
+
+.table {
+  background: white;
+  vertical-align: middle;
+}
+
+.table th {
+  text-align: center;
+}
+
+.table td {
+  text-align: center;
+}
+
+.table-hover tbody tr:hover {
+  transform: scale(1.003);
+  transition: .2s;
+}
+
+.row-danger {
+  background-color: #f8d7da !important;
+}
+
+.row-warning {
+  background-color: #fff3cd !important;
+}
+
+.row-success {
+  background-color: #d1e7dd !important;
+}
+
+.badge {
+  font-size: 0.85rem;
+}
+
+.navbar {
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}

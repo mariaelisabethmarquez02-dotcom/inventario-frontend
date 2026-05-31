@@ -1,0 +1,279 @@
+<nav class="navbar navbar-dark bg-dark mb-4">
+
+  <div class="container-fluid">
+
+    <span class="navbar-brand">
+      Gestión de Productos
+    </span>
+
+    <a
+      class="btn btn-primary"
+      href="/">
+
+      Dashboard
+
+    </a>
+
+  </div>
+
+</nav>
+
+<div class="container">
+
+  <div class="header-section">
+
+    <h1>Gestión de Productos</h1>
+
+    <p class="text-muted">
+      Administra el inventario del sistema
+    </p>
+
+  </div>
+
+  <div class="card p-4 mb-4 shadow-sm">
+
+    <h3>
+
+      {{ editMode ? 'Editar Producto' : 'Nuevo Producto' }}
+
+    </h3>
+
+    <div class="row">
+
+      <div class="col-md-6">
+
+        <input
+          class="form-control mb-3"
+          placeholder="Nombre"
+          [(ngModel)]="product.name">
+
+      </div>
+
+      <div class="col-md-6">
+
+        <select
+          class="form-control mb-3"
+          [(ngModel)]="product.supplier">
+
+          <option value="">
+            Seleccionar proveedor
+          </option>
+
+          <option
+            *ngFor="let supplier of suppliers"
+            [value]="supplier">
+
+            {{ supplier }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="col-md-6">
+
+        <select
+          class="form-control mb-3"
+          [(ngModel)]="product.category">
+
+          <option value="">
+            Seleccionar categoría
+          </option>
+
+          <option
+            *ngFor="let category of categories"
+            [value]="category">
+
+            {{ category }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="col-md-6">
+
+        <input
+          type="number"
+          class="form-control mb-3"
+          placeholder="Precio"
+          [(ngModel)]="product.price">
+
+      </div>
+
+      <div class="col-md-6">
+
+        <input
+          type="number"
+          class="form-control mb-3"
+          placeholder="Stock"
+          [(ngModel)]="product.stock">
+
+      </div>
+
+      <div class="col-md-12">
+
+        <textarea
+          class="form-control mb-3"
+          rows="3"
+          placeholder="Descripción"
+          [(ngModel)]="product.description">
+        </textarea>
+
+      </div>
+
+    </div>
+
+    <div>
+
+      <button
+        class="btn btn-success me-2"
+        (click)="saveProduct()">
+
+        {{ editMode ? 'Actualizar Producto' : 'Guardar Producto' }}
+
+      </button>
+
+      <button
+        *ngIf="editMode"
+        class="btn btn-secondary"
+        (click)="cancelEdit()">
+
+        Cancelar
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="card p-3 mb-4 shadow-sm">
+
+    <div class="row align-items-center">
+
+      <div class="col-md-6">
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar por nombre, categoría o proveedor..."
+          (input)="searchProducts($event)">
+
+      </div>
+
+      <div class="col-md-6 text-end">
+
+        <span class="badge bg-primary fs-6">
+
+          {{ filteredProducts.length }}
+          productos encontrados
+
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <table class="table table-bordered table-hover shadow-sm">
+
+    <thead class="table-dark">
+
+      <tr>
+
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Estado</th>
+        <th>Categoría</th>
+        <th>Proveedor</th>
+        <th>Acciones</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr
+        *ngFor="let product of filteredProducts"
+        [ngClass]="{
+          'row-danger': product.stock < 5,
+          'row-warning': product.stock >= 5 && product.stock < 10,
+          'row-success': product.stock >= 10
+        }">
+
+        <td>{{ product.id }}</td>
+
+        <td>{{ product.name }}</td>
+
+        <td>{{ product.description }}</td>
+
+        <td>${{ product.price | number }}</td>
+
+        <td>{{ product.stock }}</td>
+
+        <td>
+
+          <span
+            class="badge bg-danger"
+            *ngIf="product.stock < 5">
+
+            Crítico
+
+          </span>
+
+          <span
+            class="badge bg-warning text-dark"
+            *ngIf="product.stock >= 5 && product.stock < 10">
+
+            Limitado
+
+          </span>
+
+          <span
+            class="badge bg-success"
+            *ngIf="product.stock >= 10">
+
+            Disponible
+
+          </span>
+
+        </td>
+
+        <td>{{ product.category }}</td>
+
+        <td>{{ product.supplier }}</td>
+
+        <td>
+
+          <button
+            class="btn btn-primary btn-sm me-2"
+            (click)="editProduct(product)">
+
+            Editar
+
+          </button>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteProduct(product.id)">
+
+            Eliminar
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

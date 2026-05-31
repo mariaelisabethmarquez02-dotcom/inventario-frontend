@@ -1,0 +1,103 @@
+body {
+  background-color: #f5f7fa;
+}
+
+/* Tarjetas */
+.dashboard-card {
+  border: none;
+  border-radius: 12px;
+  transition: all .3s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.total-card {
+  background: #0d6efd;
+  color: white;
+}
+
+.critical-card {
+  background: #dc3545;
+  color: white;
+}
+
+.expensive-card {
+  background: #198754;
+  color: white;
+}
+
+/* Tarjetas generales */
+.card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+}
+
+/* Caja de análisis IA */
+.analysis-box {
+  max-height: 400px;
+  overflow-y: auto;
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #dee2e6;
+}
+
+/* Contenedor de gráficas */
+.chart-container {
+  height: 400px;
+}
+
+/* Navbar */
+.navbar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+}
+
+/* Tabla */
+.table {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+.table thead {
+  vertical-align: middle;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Buscador */
+.form-control {
+  border-radius: 8px;
+}
+
+/* Resumen ejecutivo */
+.card ul {
+  margin-bottom: 0;
+}
+
+.card ul li {
+  padding: 5px 0;
+}
+
+/* Indicadores */
+.alert {
+  border-radius: 10px;
+}
+
+/* Animación suave */
+.card,
+.btn,
+.alert {
+  transition: all .3s ease;
+}
+
+/* Botones */
+.btn-success:hover,
+.btn-primary:hover,
+.btn-danger:hover {
+  transform: translateY(-2px);
+}

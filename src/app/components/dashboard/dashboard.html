@@ -1,0 +1,432 @@
+<nav class="navbar navbar-dark bg-dark">
+
+  <div class="container-fluid">
+
+    <span class="navbar-brand">
+      Sistema Inteligente de Inventario
+    </span>
+
+    <a
+      class="btn btn-success"
+      href="/products">
+
+      Administrar Productos
+
+    </a>
+
+  </div>
+
+</nav>
+
+<div class="alert alert-success m-0 text-center">
+
+  🟢 Sistema operativo correctamente
+
+</div>
+
+<div class="container mt-4">
+
+  <h1>Sistema Inteligente de Inventario</h1>
+
+  <p class="text-muted">
+    Última actualización:
+    {{ currentDate | date:'medium' }}
+  </p>
+
+  <div class="alert alert-success">
+
+    <strong>Estado del Sistema</strong>
+
+    <br>
+
+    API REST: Activa
+
+    <br>
+
+    Base de Datos PostgreSQL: Conectada
+
+    <br>
+
+    Inteligencia Artificial: Integrada
+
+  </div>
+
+  <div
+    class="alert alert-warning mt-3"
+    *ngIf="criticalProducts > 0">
+
+    ⚠ Atención:
+    {{ criticalProducts }}
+    productos tienen stock crítico.
+
+  </div>
+
+  <!-- TARJETAS PRINCIPALES -->
+
+  <div class="row mt-4">
+
+    <div class="col-md-4 mb-3">
+
+      <div class="card text-bg-primary shadow-sm h-100">
+
+        <div class="card-body text-center">
+
+          <h5>Total Productos</h5>
+
+          <h2>{{ totalProducts }}</h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4 mb-3">
+
+      <div class="card text-bg-danger shadow-sm h-100">
+
+        <div class="card-body text-center">
+
+          <h5>Stock Crítico</h5>
+
+          <h2>{{ criticalProducts }}</h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4 mb-3">
+
+      <div class="card text-bg-success shadow-sm h-100">
+
+        <div class="card-body text-center">
+
+          <h5>Productos Alto Valor</h5>
+
+          <h2>{{ expensiveProducts }}</h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- INDICADORES -->
+
+  <div class="row">
+
+    <div class="col-md-6 mb-3">
+
+      <div class="card shadow-sm h-100">
+
+        <div class="card-body text-center">
+
+          <h5>Valor Total del Inventario</h5>
+
+          <h3>
+            ${{ inventoryValue | number:'1.0-0' }}
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-6 mb-3">
+
+      <div class="card shadow-sm h-100">
+
+        <div class="card-body text-center">
+
+          <h5>Precio Promedio</h5>
+
+          <h3>
+            ${{ averagePrice | number:'1.0-0' }}
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BARRA DE RIESGO -->
+
+  <div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+      <h5>Riesgo de Inventario</h5>
+
+      <div class="progress">
+
+        <div
+          class="progress-bar bg-danger"
+          [style.width.%]="criticalPercentage">
+
+          {{ criticalPercentage | number:'1.0-0' }}%
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RESUMEN -->
+
+  <div class="card shadow-sm mb-4">
+
+    <div class="card-body">
+
+      <h4>Resumen Ejecutivo</h4>
+
+      <ul class="mb-0">
+
+        <li>
+          Productos registrados:
+          {{ totalProducts }}
+        </li>
+
+        <li>
+          Productos críticos:
+          {{ criticalProducts }}
+        </li>
+
+        <li>
+          Valor total:
+          ${{ inventoryValue | number:'1.0-0' }}
+        </li>
+
+        <li>
+          Precio promedio:
+          ${{ averagePrice | number:'1.0-0' }}
+        </li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+  <!-- INVENTARIO -->
+
+  <h2>Inventario</h2>
+
+  <div class="mb-3">
+
+    <button
+      class="btn btn-success me-2"
+      (click)="exportInventory()">
+
+      Exportar CSV
+
+    </button>
+
+    <button
+      class="btn btn-primary me-2"
+      (click)="filterCategory('')">
+
+      Todos
+
+    </button>
+
+    <button
+      class="btn btn-outline-primary me-2"
+      (click)="filterCategory('Tecnología')">
+
+      Tecnología
+
+    </button>
+
+    <button
+      class="btn btn-outline-warning"
+      (click)="filterCategory('Accesorios')">
+
+      Accesorios
+
+    </button>
+
+  </div>
+
+  <div class="row mb-3">
+
+    <div class="col-md-6">
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar producto..."
+        (input)="searchProducts($event)">
+
+    </div>
+
+  </div>
+
+  <p class="text-muted">
+
+    Mostrando
+    {{ filteredProducts.length }}
+    productos
+
+  </p>
+
+  <table class="table table-striped table-bordered shadow-sm">
+
+    <thead class="table-dark">
+
+      <tr>
+
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Estado</th>
+        <th>Categoría</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr
+  *ngFor="let product of filteredProducts"
+  [ngClass]="{
+    'table-danger': product.stock < 5,
+    'table-warning': product.stock >= 5 && product.stock < 10,
+    'table-success': product.stock >= 10
+  }">
+
+        <td>{{ product.id }}</td>
+
+        <td>{{ product.name }}</td>
+
+        <td>${{ product.price | number:'1.0-0' }}</td>
+
+        <td>{{ product.stock }}</td>
+
+        <td>
+
+          <span
+            class="badge bg-success"
+            *ngIf="product.stock >= 10">
+
+            Disponible
+
+          </span>
+
+          <span
+            class="badge bg-warning text-dark"
+            *ngIf="product.stock >= 5 && product.stock < 10">
+
+            Limitado
+
+          </span>
+
+          <span
+            class="badge bg-danger"
+            *ngIf="product.stock < 5">
+
+            Crítico
+
+          </span>
+
+        </td>
+
+        <td>{{ product.category }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+  <hr>
+
+  <!-- IA Y GRÁFICAS -->
+
+  <button
+    class="btn btn-outline-primary mb-3"
+    (click)="showAI = !showAI">
+
+    {{ showAI ? 'Ocultar IA y Gráficas' : 'Mostrar IA y Gráficas' }}
+
+  </button>
+
+  <div *ngIf="showAI">
+
+    <div class="row">
+
+      <div class="col-md-6 mb-4">
+
+        <div class="card p-4 shadow-sm h-100">
+
+          <h3>Análisis Inteligente</h3>
+
+          <div class="analysis-box">
+
+            <pre>{{ aiAnalysis }}</pre>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-6 mb-4">
+
+        <div class="card p-4 shadow-sm h-100">
+
+          <h3>Indicadores del Inventario</h3>
+
+          <div class="chart-container">
+
+            <canvas
+              baseChart
+              [data]="barChartData"
+              [options]="barChartOptions"
+              [type]="'bar'">
+            </canvas>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card p-4 shadow-sm">
+
+      <h3>Distribución por Categorías</h3>
+
+      <div class="chart-container">
+
+        <canvas
+          baseChart
+          [data]="pieChartData"
+          [type]="'pie'">
+        </canvas>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="text-center text-muted mt-5 mb-3">
+
+    Sistema Inteligente de Inventario © 2026
+
+  </footer>
+
+</div>
